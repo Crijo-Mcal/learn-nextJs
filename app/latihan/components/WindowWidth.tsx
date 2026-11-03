@@ -1,3 +1,4 @@
+"use client";
 import useWindowWidth from "../hooks/useWindowWidth";
 
 export default function WindowWidth() {

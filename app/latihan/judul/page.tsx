@@ -1,9 +1,11 @@
 import TitleCounter from "../components/TitleCounter";
+import WindowWidth from "../components/WindowWidth";
 
 export default function Judul() {
   return (
-    <div className="flex flex-col flex-1 gap-2 justify-center items-center bg-white dark:bg-black">
+    <main className="flex flex-col justify-center items-center gap-6 py-32 px-16 ">
       <TitleCounter />
-    </div>
+      <WindowWidth />
+    </main>
   );
 }
