@@ -23,8 +23,8 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 ## Roadmap
 
 1. **Review React:** JSX, components, props, useState, event, conditional rendering, list, forms, useEffect, custom hooks. ✅ Selesai (2026-11-02)
-2. **Dasar Next.js:** struktur project, App Router, pages & layouts, navigasi (`<Link>`), Server & Client Components, `"use client"`. ⏳ Sedang berjalan
-3. **Praktik:** fetching data, API, loading & error, dynamic routes, forms & validasi, auth, pengelolaan data.
+2. **Dasar Next.js:** struktur project, App Router, pages & layouts, navigasi (`<Link>`), Server & Client Components, `"use client"`. ✅ Selesai (2026-11-03)
+3. **Praktik:** fetching data, API, loading & error, dynamic routes, forms & validasi, auth, pengelolaan data. ⏳ Sedang berjalan
 4. **Proyek praktik terbimbing.**
 
 ## Progres
@@ -42,12 +42,18 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 | 9 | Custom hook | `app/latihan/hooks/useWindowWidth.ts` | ✅ |
 | 10 | Nested layout & `<Link>` | `app/latihan/layout.tsx` | ✅ |
 | 11 | Server & Client Component | `app/latihan/components/WindowWidth.tsx` | ✅ |
+| 12 | Fetch di Server Component & `loading.tsx` | `app/latihan/user/page.tsx` | ✅ |
+| 13 | Penanganan error & `error.tsx` | `app/latihan/user/error.tsx` | ✅ |
 
 **Catatan Latihan 10:** `<a>` melakukan full reload sehingga semua state hilang. `<Link>` hanya mengganti `{children}`, sedangkan layout tetap hidup. Karena `cacheComponents: true` di `next.config.ts`, halaman lama tidak dibuang tetapi disembunyikan (`display: none`) oleh React `<Activity>`, jadi state di page juga bertahan (maksimal 3 halaman). Sudah dibuktikan lewat DevTools.
 
 **Catatan Latihan 11:** Semua komponen di App Router default-nya Server Component. `"use client"` adalah batas: semua yang di-import file client ikut menjadi client, jadi cukup ditulis sekali. Batas harus dipasang di **komponen**, bukan di hook, karena hook berjalan di dalam komponen pemanggilnya (dibuktikan lewat error "Attempted to call ... from the server"). Taruh `"use client"` sedalam mungkin di pohon komponen. `"use server"` adalah direktif lain untuk Server Actions.
 
-**Posisi sekarang:** Latihan 11 selesai. Berikutnya: apa yang bisa dilakukan Server Component tetapi tidak bisa dilakukan Client Component (komponen `async`, akses data langsung di server).
+**Catatan Latihan 12:** Server Component bisa `async` dan langsung `await fetch(...)` tanpa `useState`/`useEffect`. `console.log`-nya muncul di terminal, bukan di browser. Dengan `cacheComponents`, fetch yang tidak di-cache memicu peringatan "Blocking Route". Solusinya `loading.tsx` (Next.js membungkus page dengan `<Suspense>`) atau `"use cache"`. Awalnya sempat menulis versi Client Component (`useEffect`), lalu berhasil diubah ke versi server.
+
+**Catatan Latihan 13:** `fetch` tidak melempar error untuk 404/500, jadi periksa `response.ok` lalu `throw new Error(...)`. Error yang dilempar ditangkap `error.tsx` terdekat, jadi tidak perlu try/catch kecuali ingin menangani error di tempat. `error.tsx` wajib `"use client"` karena ada interaksi (tombol) dan error boundary harus berjalan di browser. Di Next.js 16 gunakan prop `retry` (mengambil ulang data), bukan `reset` (hanya menggambar ulang tanpa fetch). Di production, `error.message` dari server disembunyikan.
+
+**Posisi sekarang:** Fase 3 berjalan (fetching, loading, error sudah). Berikutnya: `"use cache"`, lalu dynamic routes.
 
 ## Hal yang perlu dipantau
 
