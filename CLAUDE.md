@@ -18,6 +18,7 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 - Kalau ada kesalahan, beri petunjuk dulu sebelum solusi lengkap.
 - Satu konsep dalam satu waktu. Kaitkan dengan JavaScript murni atau PHP bila relevan.
 - Pesan harus ringkas. Teks yang terlalu panjang membuat saya melewatkan isinya.
+- Setiap latihan harus disertai contoh hasil akhir yang konkret (tabel, URL, atau HTML yang diharapkan), supaya targetnya jelas.
 - Jangan mengubah konfigurasi atau struktur folder tanpa menjelaskan alasannya dan meminta persetujuan.
 
 ## Roadmap
@@ -44,6 +45,9 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 | 11 | Server & Client Component | `app/latihan/components/WindowWidth.tsx` | ✅ |
 | 12 | Fetch di Server Component & `loading.tsx` | `app/latihan/user/page.tsx` | ✅ |
 | 13 | Penanganan error & `error.tsx` | `app/latihan/user/error.tsx` | ✅ |
+| 14 | `"use cache"` & `cacheLife` | `app/latihan/user/page.tsx` | ✅ |
+| 15 | Dynamic routes `[id]` | `app/latihan/user/[id]/page.tsx` | ✅ |
+| 16 | `notFound()` & `not-found.tsx` | `app/latihan/user/[id]/not-found.tsx` | ✅ |
 
 **Catatan Latihan 10:** `<a>` melakukan full reload sehingga semua state hilang. `<Link>` hanya mengganti `{children}`, sedangkan layout tetap hidup. Karena `cacheComponents: true` di `next.config.ts`, halaman lama tidak dibuang tetapi disembunyikan (`display: none`) oleh React `<Activity>`, jadi state di page juga bertahan (maksimal 3 halaman). Sudah dibuktikan lewat DevTools.
 
@@ -53,12 +57,21 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 
 **Catatan Latihan 13:** `fetch` tidak melempar error untuk 404/500, jadi periksa `response.ok` lalu `throw new Error(...)`. Error yang dilempar ditangkap `error.tsx` terdekat, jadi tidak perlu try/catch kecuali ingin menangani error di tempat. `error.tsx` wajib `"use client"` karena ada interaksi (tombol) dan error boundary harus berjalan di browser. Di Next.js 16 gunakan prop `retry` (mengambil ulang data), bukan `reset` (hanya menggambar ulang tanpa fetch). Di production, `error.message` dari server disembunyikan.
 
-**Posisi sekarang:** Fase 3 berjalan (fetching, loading, error sudah). Berikutnya: `"use cache"`, lalu dynamic routes.
+**Catatan Latihan 14:** `"use cache"` di baris pertama fungsi `async` menyimpan hasilnya di memori server (mirip Redis), dengan umur yang diatur `cacheLife(...)`. Cache **dipakai bersama semua pengunjung**, jadi hanya cache data publik (daftar produk, artikel), jangan data milik user (keranjang, profil, pembayaran). Pasang di fungsi pengambil data, bukan di seluruh halaman. Di dev, log server diteruskan ke console browser dengan label "Cache" atau "Server".
+
+**Catatan Latihan 15:** Folder `[id]` menangkap bagian URL apa pun. Nilainya dibaca lewat `const { id } = await params` (tipe `PageProps<"/latihan/user/[id]">`). `id` selalu `string` karena URL adalah teks (sama seperti `$_GET`). Nama properti harus sama dengan nama di kurung siku. Karena `partialPrefetching: true`, membaca `params` di luar Suspense memicu peringatan "URL data outside of Suspense", dan `loading.tsx` di folder `[id]` sendiri menghilangkannya (yang di folder induk tidak cukup). `error.tsx` dan `loading.tsx` berlaku untuk subfolder juga. Link dinamis ditulis di dalam `.map()`: `` href={`/latihan/user/${user.id}`} ``.
+
+**Catatan Latihan 16:** Data tidak ada (404) ≠ server rusak (500). `notFound()` (dari `next/navigation`) ditangkap `not-found.tsx`, sedangkan `throw new Error` selalu ditangkap `error.tsx`, mirip `catch` berdasarkan jenis exception. Cek `response.status === 404` **di dalam** `if (!response.ok)` sebelum `throw`. `not-found.tsx` tidak perlu `"use client"` karena `<Link>` bukan interaksi `onClick`. Jangan menaruh `<Link>` di dalam `<button>`. `retry()` mengulang halaman untuk URL yang sedang dibuka, bukan `page.tsx` di folder induk, karena page tidak bertingkat seperti layout.
+
+**Posisi sekarang:** Fase 3 berjalan (fetching, loading, error, cache, dynamic routes, not-found sudah). Berikutnya: forms dan Server Actions (`"use server"`) untuk mengirim data.
 
 ## Hal yang perlu dipantau
 
 - Pernah tertukar antara `onClick={fungsi}` dan `onClick={fungsi()}`.
 - Pernah menggabungkan beberapa state dalam satu kondisi tampilan.
 - Pernah mengira bilangan negatif bernilai falsy (sudah diluruskan).
+- Sering memperbaiki poin utama review tetapi melewatkan poin kecil. Beri catatan bernomor dan minta dicek satu per satu.
+- Cenderung kembali ke pola lama (`useEffect` untuk fetch) saat ada pola baru.
+- Istilah kadang kurang tepat walaupun konsepnya benar. Sering menyimpulkan aturan umum dari satu percobaan.
 
 > Perbarui bagian **Progres** setiap kali satu latihan selesai.
