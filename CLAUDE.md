@@ -9,6 +9,7 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 - Menguasai dasar HTML, CSS, JavaScript, PHP, MySQL, REST API, dan dasar OOP.
 - Pernah belajar React dan Vite. Sekarang mengulang React sambil belajar Next.js untuk pertama kalinya.
 - Paham dasar TypeScript.
+- Pengalaman: magang membangun sistem reservasi + pembayaran (PHP/MySQL). Proyek pribadi dengan React, Express, PostgreSQL, Docker, JWT (access + refresh token), Redis, rate limiting, dan deploy. Konsep auth, database, dan cache sudah dikuasai, yang dipelajari di sini adalah cara Next.js melakukannya.
 - Tujuan: mampu menulis kode sendiri, bukan sekadar menghasilkan aplikasi lewat AI.
 
 ## Cara membimbing
@@ -48,6 +49,8 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 | 14 | `"use cache"` & `cacheLife` | `app/latihan/user/page.tsx` | ✅ |
 | 15 | Dynamic routes `[id]` | `app/latihan/user/[id]/page.tsx` | ✅ |
 | 16 | `notFound()` & `not-found.tsx` | `app/latihan/user/[id]/not-found.tsx` | ✅ |
+| 17 | Form & Server Action | `app/latihan/tamu/page.tsx` | ✅ |
+| 18 | `useActionState` & status pending | `app/latihan/tamu/FormTamu.tsx` | ✅ |
 
 **Catatan Latihan 10:** `<a>` melakukan full reload sehingga semua state hilang. `<Link>` hanya mengganti `{children}`, sedangkan layout tetap hidup. Karena `cacheComponents: true` di `next.config.ts`, halaman lama tidak dibuang tetapi disembunyikan (`display: none`) oleh React `<Activity>`, jadi state di page juga bertahan (maksimal 3 halaman). Sudah dibuktikan lewat DevTools.
 
@@ -63,7 +66,11 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 
 **Catatan Latihan 16:** Data tidak ada (404) ≠ server rusak (500). `notFound()` (dari `next/navigation`) ditangkap `not-found.tsx`, sedangkan `throw new Error` selalu ditangkap `error.tsx`, mirip `catch` berdasarkan jenis exception. Cek `response.status === 404` **di dalam** `if (!response.ok)` sebelum `throw`. `not-found.tsx` tidak perlu `"use client"` karena `<Link>` bukan interaksi `onClick`. Jangan menaruh `<Link>` di dalam `<button>`. `retry()` mengulang halaman untuk URL yang sedang dibuka, bukan `page.tsx` di folder induk, karena page tidak bertingkat seperti layout.
 
-**Posisi sekarang:** Fase 3 berjalan (fetching, loading, error, cache, dynamic routes, not-found sudah). Berikutnya: forms dan Server Actions (`"use server"`) untuk mengirim data.
+**Catatan Latihan 17:** Server Action adalah fungsi `async` dengan `"use server"` yang diberikan ke `<form action={fn}>`. Fungsi ini menerima `FormData` (seperti `$_POST`), dan Next.js otomatis membuat endpoint POST ke URL halaman itu sendiri. Siapa pun bisa memanggilnya, jadi validasi wajib dilakukan di dalam fungsi. `formData.get()` bertipe `string | File | null`, sehingga perlu *type narrowing* dengan `typeof nama !== "string"` (short-circuit `||` membuat `.trim()` aman). Panggil `refresh()` dari `next/cache` setelah mengubah data.
+
+**Catatan Latihan 18:** `const [state, formAction, pending] = useActionState(action, initialState)` di Client Component. Action menerima `(prevState, formData)`, dan nilai return-nya menjadi `state` berikutnya, jadi bentuknya harus sama dengan `initialState`. Server Action untuk Client Component ditulis di file terpisah dengan `"use server"` di baris 1. Halaman yang membaca data server tetap Server Component, karena kalau dijadikan client, browser mendapat salinan array sendiri. `import` tidak menyalin: semua file mendapat array yang sama, dan proses Node.js terus hidup (berbeda dengan PHP yang mulai dari nol tiap request). React 19 otomatis mengosongkan input form setelah action selesai, bukan karena `refresh()`.
+
+**Posisi sekarang:** Fase 3 cukup (sisa materi dipelajari di dalam proyek). **Fase 4 dimulai 2026-11-05: proyek 1, To-Do App Next.js**, project baru terpisah (`Desktop/todo-nextjs`, repo sendiri untuk portfolio) dengan **MySQL**, tanpa auth dulu. Tahapan: (1) setup + DB, (2) daftar todo dari DB, (3) tambah (Server Action + `useActionState`), (4) selesai & hapus, (5) edit `[id]` + `notFound()`, (6) loading/error. Proyek 2 nanti: booking app + auth.
 
 ## Hal yang perlu dipantau
 
