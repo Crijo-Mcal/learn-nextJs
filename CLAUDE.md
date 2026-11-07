@@ -33,24 +33,26 @@ Project ini adalah tempat belajar, bukan aplikasi produksi. Gunakan bahasa Indon
 
 | No | Materi | File | Status |
 |----|--------|------|--------|
-| 1 | Props | `app/latihan/components/Card.tsx` | ✅ |
-| 2 | useState | `app/latihan/components/Quantity.tsx` | ✅ |
-| 3 | Lifting state | `app/latihan/components/ColorPanel.tsx` | ✅ |
-| 4 | Conditional rendering | | ✅ |
-| 5 | List & `key` | `app/latihan/page.tsx` | ✅ |
-| 6 | Forms | `app/latihan/components/NameForm.tsx` | ✅ |
-| 7 | useEffect dependency | `app/latihan/components/TitleCounter.tsx` | ✅ |
-| 8 | useEffect cleanup | `app/latihan/components/WindowWidth.tsx` | ✅ |
-| 9 | Custom hook | `app/latihan/hooks/useWindowWidth.ts` | ✅ |
-| 10 | Nested layout & `<Link>` | `app/latihan/layout.tsx` | ✅ |
-| 11 | Server & Client Component | `app/latihan/components/WindowWidth.tsx` | ✅ |
-| 12 | Fetch di Server Component & `loading.tsx` | `app/latihan/user/page.tsx` | ✅ |
-| 13 | Penanganan error & `error.tsx` | `app/latihan/user/error.tsx` | ✅ |
-| 14 | `"use cache"` & `cacheLife` | `app/latihan/user/page.tsx` | ✅ |
-| 15 | Dynamic routes `[id]` | `app/latihan/user/[id]/page.tsx` | ✅ |
-| 16 | `notFound()` & `not-found.tsx` | `app/latihan/user/[id]/not-found.tsx` | ✅ |
-| 17 | Form & Server Action | `app/latihan/tamu/page.tsx` | ✅ |
-| 18 | `useActionState` & status pending | `app/latihan/tamu/FormTamu.tsx` | ✅ |
+| 1 | Props | `app/_components/ProductCard.tsx` | ✅ |
+| 2 | useState | `app/_components/Quantity.tsx` | ✅ |
+| 3 | Lifting state | `app/_components/ColorPanel.tsx` | ✅ |
+| 4 | Conditional rendering | `app/_components/Quantity.tsx` | ✅ |
+| 5 | List & `key` | `app/produtos/page.tsx` | ✅ |
+| 6 | Forms | `app/_components/NameForm.tsx` | ✅ |
+| 7 | useEffect dependency | `app/_components/TitleCounter.tsx` | ✅ |
+| 8 | useEffect cleanup | `app/_hooks/useWindowWidth.ts` | ✅ |
+| 9 | Custom hook | `app/_hooks/useWindowWidth.ts` | ✅ |
+| 10 | Nested layout & `<Link>` | `app/layout.tsx` | ✅ |
+| 11 | Server & Client Component | `app/_components/WindowWidth.tsx`, `app/contador/page.tsx` | ✅ |
+| 12 | Fetch di Server Component & `loading.tsx` | `app/utilizadores/page.tsx` | ✅ |
+| 13 | Penanganan error & `error.tsx` | `app/utilizadores/error.tsx` | ✅ |
+| 14 | `"use cache"` & `cacheLife` | `app/utilizadores/page.tsx` | ✅ |
+| 15 | Dynamic routes `[id]` | `app/utilizadores/[id]/page.tsx` | ✅ |
+| 16 | `notFound()` & `not-found.tsx` | `app/utilizadores/[id]/not-found.tsx` | ✅ |
+| 17 | Form & Server Action | `app/convidados/actions.ts` | ✅ |
+| 18 | `useActionState` & status pending | `app/convidados/GuestForm.tsx` | ✅ |
+
+**Struktur project (dirapikan 2026-11-05):** folder `app/latihan` dihapus, dan semua latihan dipindah langsung ke `app/`, supaya halaman utama (`/`) berisi daftar semua latihan. Teks UI, URL, dan komentar memakai bahasa **Portugis** (pt-PT). Nama variabel dan fungsi memakai bahasa **Inggris**. `CLAUDE.md` tetap dalam bahasa Indonesia. Komponen bersama ada di `app/_components`, dan hook di `app/_hooks` (folder berawalan `_` adalah *private folder*, bukan route). Gaya tampilan diseragamkan lewat token warna dan class `.card`, `.btn`, `.btn-secondary`, `.input` di `app/globals.css`. Route: `/produtos` (1, 2, 4, 5), `/cores` (3), `/formulario` (6), `/contador` (7, 8, 9, 11), `/utilizadores` (12–16), `/convidados` (17–18).
 
 **Catatan Latihan 10:** `<a>` melakukan full reload sehingga semua state hilang. `<Link>` hanya mengganti `{children}`, sedangkan layout tetap hidup. Karena `cacheComponents: true` di `next.config.ts`, halaman lama tidak dibuang tetapi disembunyikan (`display: none`) oleh React `<Activity>`, jadi state di page juga bertahan (maksimal 3 halaman). Sudah dibuktikan lewat DevTools.
 

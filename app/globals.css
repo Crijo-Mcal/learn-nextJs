@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
+/*
+  Tokens de cor da aplicação.
+  Cada cor é uma variável CSS. O bloco @theme regista-as no Tailwind,
+  por isso podemos usar classes como bg-surface, text-muted ou border-border.
+  Para mudar o aspeto de toda a aplicação, basta alterar os valores aqui.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --muted: #64748b;
+  --accent: #0d9488;
+  --accent-foreground: #ffffff;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+
+/* Modo escuro: segue a preferência do sistema operativo. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b1120;
+    --foreground: #e2e8f0;
+    --surface: #111827;
+    --border: #1f2937;
+    --muted: #94a3b8;
+    --accent: #2dd4bf;
+    --accent-foreground: #042f2e;
+    --success: #4ade80;
+    --danger: #f87171;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/*
+  Classes reutilizáveis, para não repetir as mesmas classes do Tailwind em todos os componentes.
+  Ficam na camada "components", por isso uma classe utilitária (ex.: p-0) consegue sobrepor-se.
+*/
+@layer components {
+  .card {
+    @apply rounded-xl border border-border bg-surface p-6 shadow-sm;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-border;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-normal outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30;
+  }
 }

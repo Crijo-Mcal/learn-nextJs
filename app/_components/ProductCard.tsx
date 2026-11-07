@@ -1,18 +1,28 @@
 import Quantity from "./Quantity";
 
-type CardProps = {
+type ProductCardProps = {
   title: string;
   price: number;
 };
 
-export default function Card({title, price}: CardProps) {
+// Formata números como preço em euros (ex.: 800 → "800,00 €").
+const priceFormatter = new Intl.NumberFormat("pt-PT", {
+  style: "currency",
+  currency: "EUR",
+});
+
+/*
+  Exercício 1 — Props
+  O componente recebe dados do pai através de props, como os argumentos de uma função.
+  As props são só de leitura: o componente usa-as, mas nunca as altera.
+*/
+export default function ProductCard({title, price}: ProductCardProps) {
   return (
-    <div className="flex flex-col items-center justify-center  bg-cyan-300 p-2 h-75 w-full max-w-[300px] gap-6 text-center rounded-md">
-      <h2 className="max-w-xs text-2xl font-semibold  tracking-tight  text-black">
-        {title}
-      </h2>
-      <p className="text-xl font-bold text-cyan-700 ">${price.toFixed(2)}</p>
+    <article className="card flex flex-col items-center gap-4 text-center">
+      <h2 className="text-xl font-semibold">{title}</h2>
+      <p className="text-2xl font-bold text-accent">{priceFormatter.format(price)}</p>
+      {/* Cada cartão tem a sua própria instância de Quantity, com estado independente. */}
       <Quantity />
-    </div>
+    </article>
   );
 }

@@ -1,19 +1,31 @@
-import Card from "./components/Card";
+import PageHeader from "@/app/_components/PageHeader";
+import ProductCard from "@/app/_components/ProductCard";
 
-const data = [
-  {id: 1, title: "Laptop", price: 800},
-  {id: 2, title: "Keyboard", price: 50},
-  {id: 3, title: "Mouse", price: 25},
+const products = [
+  {id: 1, title: "Portátil", price: 800},
+  {id: 2, title: "Teclado", price: 50},
+  {id: 3, title: "Rato", price: 25},
 ];
 
-export default function Latihan1() {
+/*
+  Exercício 5 — Listas e key
+  .map() transforma cada item do array num elemento JSX.
+  A key tem de ser única e estável (aqui, o id do produto). Evita usar o índice
+  do array quando a lista pode ser reordenada ou ter itens removidos.
+*/
+export default function ProductsPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full h-full justify-center items-center gap-6 py-32 px-16 bg-white dark:bg-black sm:items-start">
-        {data.map((item) => (
-          <Card key={item.id} title={item.title} price={item.price} />
+    <>
+      <PageHeader
+        exercises="Exercícios 1, 2, 4 e 5"
+        title="Produtos"
+        description="Cartões que recebem dados por props. Cada cartão tem o seu próprio contador com useState, e o texto muda com renderização condicional."
+      />
+      <div className="grid gap-6 sm:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard key={product.id} title={product.title} price={product.price} />
         ))}
-      </main>
-    </div>
+      </div>
+    </>
   );
 }

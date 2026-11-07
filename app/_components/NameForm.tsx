@@ -2,65 +2,64 @@
 
 import {useState} from "react";
 
+/*
+  Exercício 6 — Formulários (inputs controlados)
+  O valor do input vem do estado (value={name}) e cada tecla atualiza o estado (onChange).
+  Assim, o React é a "fonte da verdade" do formulário.
+  event.preventDefault() impede o reload da página que o browser faria ao submeter.
+
+  Compara com app/convidados, onde um formulário parecido usa uma Server Action
+  e não precisa de useState nem de preventDefault.
+*/
 export default function NameForm() {
   const [name, setName] = useState("");
-  const [saveName, setSaveName] = useState("");
+  const [savedName, setSavedName] = useState("");
   const [error, setError] = useState("");
 
   function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (name.trim() === "") {
-      setError("Name is required");
-      setName("");
+    const trimmedName = name.trim();
+    if (trimmedName === "") {
+      setError("O nome é obrigatório.");
       return;
     }
+
     setError("");
-    setSaveName(name.trim());
+    setSavedName(trimmedName);
     setName("");
   }
 
   return (
-    <>
-      <div className="h-7">
-        {saveName && (
-          <p className="text-green-500 text-base">Saved name: {saveName}</p>
-        )}
-      </div>
-
-      <form
-        className="flex flex-col gap-4 bg-cyan-300 p-4 rounded-md"
-        onSubmit={handleSubmit}
-      >
+    <form onSubmit={handleSubmit} className="card flex w-full max-w-sm flex-col gap-4">
+      <label className="flex flex-col gap-1 text-sm font-medium">
+        Nome
         <input
-          className="px-4 py-2 text-black rounded-md border border-cyan-500 focus:outline-none ring-2 ring-cyan-500 focus:border-cyan-500"
+          className="input"
           type="text"
-          placeholder="Name"
+          placeholder="Escreve o teu nome"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
             setError("");
           }}
         />
-        <button
-          className="bg-cyan-700 text-white px-4 py-2 rounded-md hover:bg-cyan-600"
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
+      </label>
 
-      <div className="h-7">
-        {name.trim() !== "" && !error && (
-          <p className="text-green-500 text-base">Hello, {name}!</p>
-        )}
+      {/* Como o input é controlado, podemos usar o valor enquanto o utilizador escreve. */}
+      <p className="min-h-5 text-sm text-muted">
+        {name.trim() !== "" && `Olá, ${name.trim()}!`}
+      </p>
 
-        {name.trim() == "" && !error && (
-          <p className="text-rose-500 text-base">Please enter your name.</p>
-        )}
+      <button className="btn" type="submit">
+        Guardar
+      </button>
 
-        {error && <p className="text-red-500 text-base">{error}</p>}
+      {/* Cada mensagem depende de um só estado, para a lógica ficar simples de ler. */}
+      <div className="min-h-5 text-sm">
+        {error && <p className="text-danger">{error}</p>}
+        {!error && savedName && <p className="text-success">Nome guardado: {savedName}</p>}
       </div>
-    </>
+    </form>
   );
 }

@@ -1,9 +1,15 @@
-import NameForm from "../components/NameForm";
+import NameForm from "@/app/_components/NameForm";
+import PageHeader from "@/app/_components/PageHeader";
 
-export default function Form() {
+export default function FormPage() {
   return (
-    <main className="flex flex-col justify-center items-center gap-6 py-32 px-16 ">
+    <>
+      <PageHeader
+        exercises="Exercício 6"
+        title="Formulário"
+        description="Formulário com input controlado e validação no cliente (useState + onSubmit)."
+      />
       <NameForm />
-    </main>
+    </>
   );
 }

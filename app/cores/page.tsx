@@ -1,9 +1,15 @@
-import ColorPanel from "../components/ColorPanel";
+import ColorPanel from "@/app/_components/ColorPanel";
+import PageHeader from "@/app/_components/PageHeader";
 
-export default function Latihan2() {
+export default function ColorsPage() {
   return (
-    <main className="flex  w-full h-full justify-center items-center gap-6 py-32 px-16">
+    <>
+      <PageHeader
+        exercises="Exercício 3"
+        title="Cores"
+        description="Dois componentes irmãos partilham o mesmo estado, que vive no componente pai e desce por props."
+      />
       <ColorPanel />
-    </main>
+    </>
   );
 }

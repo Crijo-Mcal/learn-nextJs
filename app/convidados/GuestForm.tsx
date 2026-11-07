@@ -1,26 +1,43 @@
 "use client";
 
-import simpanNama from "./actions";
 import {useActionState} from "react";
+import {addGuest, type GuestFormState} from "./actions";
 
-export default function FormTamu() {
-  const [state, formAction, pending] = useActionState(simpanNama, {
-    message: "",
-  });
+const initialState: GuestFormState = {message: "", success: false};
+
+/*
+  Exercício 18 — useActionState
+  state      → o último valor devolvido pela action (parecido com uma "flash message" na sessão)
+  formAction → a action "embrulhada" pelo React, para usar em <form action={...}>
+  pending    → true enquanto a action está a correr no servidor
+
+  Este componente tem de ser Client Component porque usa um hook.
+  A action não pode ser escrita aqui: vem de um ficheiro com "use server".
+
+  Nota: quando a action termina sem erro, o React 19 limpa automaticamente os inputs
+  do formulário. Não é o refresh() que os limpa (a mensagem do state continua visível).
+*/
+export default function GuestForm() {
+  const [state, formAction, pending] = useActionState(addGuest, initialState);
+
   return (
-    <form
-      className="flex flex-col justify-center p-2 items-center gap-2  h-25 bg-cyan-600 rounded-sm "
-      action={formAction}
-    >
-      <input
-        className="border ring-0 focus:outline-0 rounded-sm pl-1"
-        type="text"
-        name="nama"
-      />
-      <button disabled={pending} type="submit">
-        {pending ? "Menyinpan.." : "simpan"}
+    <form action={formAction} className="card flex flex-col gap-3">
+      <label className="flex flex-col gap-1 text-sm font-medium">
+        Nome
+        <input className="input" type="text" name="name" placeholder="Escreve o teu nome" />
+      </label>
+
+      <button type="submit" className="btn" disabled={pending}>
+        {pending ? "A guardar..." : "Adicionar"}
       </button>
-      <p>{state.message}</p>
+
+      {/* aria-live avisa os leitores de ecrã quando a mensagem muda. */}
+      <p
+        aria-live="polite"
+        className={`min-h-5 text-sm ${state.success ? "text-success" : "text-danger"}`}
+      >
+        {state.message}
+      </p>
     </form>
   );
 }

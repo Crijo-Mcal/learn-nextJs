@@ -2,6 +2,16 @@
 
 import {useState} from "react";
 
+/*
+  Exercício 2 — useState e eventos
+  Uma variável normal (let count = 0) voltaria a 0 em cada render.
+  O useState guarda o valor entre renders e, quando chamamos setCount,
+  o React volta a renderizar o componente com o novo valor.
+
+  Exercício 4 — Renderização condicional
+  {condição && <Elemento />} mostra o elemento só quando a condição é verdadeira.
+  {condição ? A : B} escolhe entre duas opções.
+*/
 export default function Quantity() {
   const [count, setCount] = useState(0);
 
@@ -10,6 +20,7 @@ export default function Quantity() {
   }
 
   function handleDecrement() {
+    // Não permitir valores negativos.
     if (count <= 0) {
       return;
     }
@@ -17,38 +28,31 @@ export default function Quantity() {
   }
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center gap-4">
-        <p className="text-xl font-bold text-cyan-700 ">{count}</p>
-        <div className="flex gap-4">
-          <button
-            className="bg-cyan-700 text-white px-4 py-2 rounded-md"
-            onClick={handleIncrement}
-          >
-            +
-          </button>
+    <div className="flex flex-col items-center gap-3">
+      <div className="flex items-center gap-3">
+        {/* Caixa com largura fixa para o layout não "saltar" quando o botão aparece. */}
+        <div className="w-10">
           {count > 0 && (
+            // Passamos a função SEM parênteses: onClick={handleDecrement()}
+            // executaria a função logo no render, e não no clique.
             <button
-              className="bg-cyan-700 text-white px-4 py-2 rounded-md"
+              className="btn-secondary w-10"
               onClick={handleDecrement}
+              aria-label="Diminuir"
             >
-              -
+              −
             </button>
           )}
         </div>
+        <span className="w-8 text-xl font-semibold tabular-nums">{count}</span>
+        <button className="btn w-10" onClick={handleIncrement} aria-label="Aumentar">
+          +
+        </button>
       </div>
 
-      <div className="h-7">
-        {count <= 0 ? (
-          <p className="text-xl font-bold text-red-700 ">
-            no item selected {count}
-          </p>
-        ) : (
-          <p className="text-xl font-bold text-blue-600 ">
-            item selected {count}
-          </p>
-        )}
-      </div>
-    </>
+      <p className={`text-sm ${count > 0 ? "text-success" : "text-muted"}`}>
+        {count > 0 ? `${count} selecionado(s)` : "Nenhum item selecionado"}
+      </p>
+    </div>
   );
 }
